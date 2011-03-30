@@ -3,6 +3,7 @@ import sys
 import platform
 import subprocess
 
+MY_DIR = os.path.dirname(__file__)
 REQUIRED_PACKAGES = [
     "git",
     "puppet"
@@ -30,4 +31,4 @@ if __name__ == '__main__':
     prefer(platform.platform().endswith('-Ubuntu-10.10-maverick'),
            'The platform should be Ubuntu 10.10 (maverick).')
     run(['apt-get', 'install'] + REQUIRED_PACKAGES)
-    print "TODO: Need to finish this up."
+    print "TODO: Need to finish this up!!"

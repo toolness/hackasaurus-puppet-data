@@ -4,8 +4,6 @@ import os
 import sys
 import subprocess
 
-SSH_CMD = 'ssh'
-
 MY_DIR = os.path.dirname(__file__)
 
 if __name__ == '__main__':
@@ -13,10 +11,26 @@ if __name__ == '__main__':
         print "usage: %s <server-name>" % sys.argv[0]
         sys.exit(1)
     server = sys.argv[1]
-    subprocess.check_call(
-        ['scp', 'setup_server.py', 'root@%s:' % server],
-        cwd=MY_DIR
-    )
-    subprocess.check_call(
-        ['ssh', 'root@%s' % server, "python setup_server.py"]
-    )
+
+    # We're going to have to use tar here instead of git archive,
+    # as git archive doesn't deal with submodules and the
+    # third-party git-archive-all.sh script doesn't seem to
+    # support OS X.
+    tarfile = subprocess.Popen(
+        ['tar', 'zcv', '--exclude', '.git*', '.'],
+        cwd=os.path.join(MY_DIR, '..'),
+        stdout=subprocess.PIPE
+        )
+
+    ssh_args = ['ssh', 'root@%s' % server]
+    subprocess.check_call(ssh_args +  ['cat > payload.tgz'],
+                          stdin=tarfile.stdout)
+    remote_cmds = [
+        'rm -rf /var/hackasaurus-puppet-data',
+        'mkdir /var/hackasaurus-puppet-data',
+        'cd /var/hackasaurus-puppet-data',
+        'tar -xvf /root/payload.tgz',
+        'rm /root/payload.tgz',
+        'python tools/setup_server.py'
+        ]
+    subprocess.check_call(ssh_args + [';'.join(remote_cmds)])
