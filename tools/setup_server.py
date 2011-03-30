@@ -4,6 +4,7 @@ import platform
 import subprocess
 
 MY_DIR = os.path.dirname(__file__)
+ROOT_DIR = os.path.abspath('%s/..' % MY_DIR)
 REQUIRED_PACKAGES = [
     "git",
     "puppet"
@@ -31,4 +32,6 @@ if __name__ == '__main__':
     prefer(platform.platform().endswith('-Ubuntu-10.10-maverick'),
            'The platform should be Ubuntu 10.10 (maverick).')
     run(['apt-get', 'install'] + REQUIRED_PACKAGES)
-    print "TODO: Need to finish this up!!"
+    run(['puppet', 'apply', '--modulepath', '%s/modules' % ROOT_DIR,
+         '%s/manifests/site.pp' % ROOT_DIR])
+    print "Server configuration successfully updated."
