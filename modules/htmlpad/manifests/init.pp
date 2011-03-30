@@ -3,9 +3,8 @@ class htmlpad {
   $etherpad = 'etherpad.mozilla.org:9000'
   $rootDir = '/var/htmlpad'
   $apacheDir = '/etc/apache2'
-  $varDir = "$rootDir/$site"
-  $wsgiDir = "$varDir/wsgi-scripts"
-  $staticFilesDir = "$varDir/static-files"
+  $wsgiDir = "$rootDir/wsgi-scripts"
+  $staticFilesDir = "$rootDir/static-files"
 
   package { 'libapache2-mod-wsgi':
     ensure => present,
