@@ -16,7 +16,6 @@ class htmlpad {
     enable => true,
     hasrestart => true,
     hasstatus => true,
-    subscribe => File["$apacheDir/sites-available/$site"],
   }
 
   file { "$apacheDir/sites-available/$site":
@@ -24,6 +23,7 @@ class htmlpad {
     owner => 'root',
     group => 'root',
     content => template("htmlpad/apache-site.conf.erb"),
+    notify => Service['apache2'],
   }
 
   file { "$apacheDir/sites-enabled/001-$site":
