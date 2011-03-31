@@ -14,20 +14,21 @@ class hackasaurus {
     notify => Service['apache2'],
   }
 
-  file { "$recruitmentFormsDir":
-    ensure => directory,
-    owner => 'www-data',
-    group => 'www-data',
-    require => Vcsrepo["$rootDir"],
-  }
-
   file { "$apacheDir/sites-enabled/001-$site":
     ensure => link,
-    target => "$apacheDir/sites-available/$site"
+    target => "$apacheDir/sites-available/$site",
+    notify => Service['apache2'],
   }
   
   vcsrepo { "$rootDir":
     ensure => present,
     source => "git://github.com/hackasaurus/hackasaurus.org.git"
+  }
+
+  file { "$recruitmentFormsDir":
+    ensure => directory,
+    owner => 'www-data',
+    group => 'www-data',
+    require => Vcsrepo["$rootDir"],
   }
 }

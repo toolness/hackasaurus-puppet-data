@@ -31,7 +31,8 @@ if __name__ == '__main__':
     ensure(os.geteuid() == 0, 'This script must be run as root.')
     prefer(platform.platform().endswith('-Ubuntu-10.10-maverick'),
            'The platform should be Ubuntu 10.10 (maverick).')
-    run(['apt-get', 'install'] + REQUIRED_PACKAGES)
+    os.environ['DEBIAN_FRONTEND'] = 'noninteractive'
+    run(['apt-get', '-q', '-y', 'install'] + REQUIRED_PACKAGES)
     run(['puppet', 'apply', '-v', '--modulepath', '%s/modules' % ROOT_DIR,
          '%s/manifests/site.pp' % ROOT_DIR])
     print "Server configuration successfully updated."

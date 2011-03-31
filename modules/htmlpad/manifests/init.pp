@@ -28,7 +28,8 @@ class htmlpad {
 
   file { "$apacheDir/sites-enabled/001-$site":
     ensure => link,
-    target => "$apacheDir/sites-available/$site"
+    target => "$apacheDir/sites-available/$site",
+    notify => Service['apache2'],
   }
   
   vcsrepo { "$rootDir":
