@@ -1,8 +1,8 @@
 This is an attempt to concisely define and document the server configuration for [Hackasaurus][] sites using [Puppet Best Practices][].
 
-The Puppet files in this repository assume a bare Ubuntu maverick server (10.10) that has Git and Puppet installed.
+Deployment is assumed to target a bare Ubuntu maverick server (10.10). All other dependencies are automatically installed by the various configuration files in this repository.
 
-If these prerequisites are satisfied, and if your SSH key can be used to access the remote server as root, then you can run `tools/deploy.py` to deploy Hackasaurus applications to the remote server.
+If your SSH key can be used to access the remote server as root, then you can run `tools/deploy.py` to deploy Hackasaurus applications to the remote server.
 
 ## Local Configuration ##
 
