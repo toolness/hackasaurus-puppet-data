@@ -6,8 +6,9 @@ If your SSH key can be used to access the remote server as root, then you can ru
 
 ## Local Configuration ##
 
-Currently, a virtual hosting configuration is used for the htmlpad.org domain.
-You may need to edit your local `/etc/hosts` file accordingly.
+Virtual hosting configurations are used for the domains of Hackasaurus sites. To make development and testing easy, each site can also be accessed at its normal domain suffixed with .dev.
+
+For example, if you want to access htmlpad.org on your development server, you can add an entry for htmlpad.org.dev to your `/etc/hosts` file.
 
   [Hackasaurus]: http://hackasaurus.org
   [Puppet Best Practices]: http://projects.puppetlabs.com/projects/puppet/wiki/Puppet_Best_Practice
