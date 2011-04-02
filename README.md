@@ -4,6 +4,8 @@ Deployment is assumed to target a bare Ubuntu maverick server (10.10). All other
 
 If your SSH key can be used to access the remote server as root, then you can run `tools/deploy.py` to deploy Hackasaurus applications to the remote server.
 
+You can also run `tools/test.py` to run integration tests against the remote server.
+
 ## Local Configuration ##
 
 Virtual hosting configurations are used for the domains of Hackasaurus sites. To make development and testing easy, each site can also be accessed at its normal domain suffixed with .dev.
