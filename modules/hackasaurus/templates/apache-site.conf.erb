@@ -1,6 +1,6 @@
 <VirtualHost *:80>
   ServerName <%= site %>
-  ServerName <%= site %>.dev
+  ServerAlias <%= site %>.dev
 
   DocumentRoot <%= staticFilesDir %>
   <Directory />
