@@ -30,7 +30,7 @@ class HtmlpadTests(unittest.TestCase):
         self.assertTrue('Welcome to htmlpad.org' in f.read())
 
     def testStaticFilesDirIsAccessible(self):
-        f = vhostreq('http://htmlpad.org/static-files/jquery.js')
+        f = vhostreq('http://htmlpad.org/static/js/jquery.min.js')
         self.assertTrue('John Resig' in f.read())
 
 class HackasaurusTests(unittest.TestCase):
