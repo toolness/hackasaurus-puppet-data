@@ -3,6 +3,7 @@ class htmlpad {
   $etherpad = 'etherpad.mozilla.org:9000'
   $rootDir = '/var/htmlpad.org'
   $repoDir = "$rootDir/htmlpad"
+  $python = "$rootDir/bin/python"
   $sitePackagesDir = "$rootDir/lib/python2.6/site-packages"
   $projectDir = "$sitePackagesDir/htmlpad_dot_org"
   $staticFilesDir = "$rootDir/static"
@@ -23,10 +24,12 @@ class htmlpad {
     ensure => directory,
     recurse => true,
     source => "puppet:///modules/htmlpad/wsgi",
+    require => Exec['htmlpad-virtualenv']
   }
 
   file { "$rootDir/manage.py":
-    source => "puppet:///modules/htmlpad/manage.py"
+    source => "puppet:///modules/htmlpad/manage.py",
+    require => Exec['htmlpad-virtualenv']
   }
 
   file { "$projectDir/settings_local.py":
@@ -40,14 +43,21 @@ class htmlpad {
   }
 
   exec { 'install-htmlpad':
-    command => "$rootDir/bin/python setup.py develop",
+    command => "$python setup.py develop",
     cwd => "$repoDir",
     require => [ Exec['htmlpad-virtualenv'], Vcsrepo["$repoDir"] ]
   }
 
-  exec { 'collect-staticfiles':
-    command => "$rootDir/bin/python $rootDir/manage.py collectstatic --noinput",
+  exec { 'collect-htmlpad-staticfiles':
+    command => "$python manage.py collectstatic --noinput",
+    cwd => "$rootDir",
     require => [ File["$rootDir/manage.py"], Exec['install-htmlpad'] ]
+  }
+  
+  exec { 'run-htmlpad-tests':
+    command => "$python manage.py test",
+    cwd => "$rootDir",
+    require => [ Exec['collect-htmlpad-staticfiles'] ]
   }
 
   apache2::vhost { "$site":
