@@ -2,16 +2,15 @@
   ServerName <%= site %>
   ServerAlias <%= site %>.dev
 
-  SetEnv htmlpad.etherpad <%= etherpad %>
   WSGIDaemonProcess <%= site %> processes=1 threads=15
   WSGIProcessGroup <%= site %>
-  WSGIScriptAlias / <%= wsgiDir %>/htmlpad.py
+  WSGIScriptAlias / <%= wsgiDir %>/htmlpad.wsgi
   <Directory <%= wsgiDir %>>
     Order allow,deny
     Allow from all
   </Directory>
 
-  Alias /static-files "<%= staticFilesDir %>"
+  Alias /static "<%= staticFilesDir %>"
   <Directory "<%= staticFilesDir %>">
     Options Indexes FollowSymLinks MultiViews
     AllowOverride None
