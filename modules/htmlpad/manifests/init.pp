@@ -2,10 +2,9 @@ class htmlpad {
   $site = 'htmlpad.org'
   $etherpad = 'etherpad.mozilla.org:9000'
   $rootDir = '/var/htmlpad.org'
-  $repoDir = "$rootDir/htmlpad"
+  $repoDir = "$rootDir/src/htmlpad"
   $python = "$rootDir/bin/python"
   $sitePackagesDir = "$rootDir/lib/python2.6/site-packages"
-  $projectDir = "$sitePackagesDir/htmlpad_dot_org"
   $staticFilesDir = "$rootDir/static"
   $wsgiDir = "$rootDir/wsgi"
 
@@ -13,33 +12,31 @@ class htmlpad {
     ensure => present,
   }
 
-  file { "$projectDir":
+  file { "$rootDir":
     ensure => directory,
     recurse => true,
-    source => "puppet:///modules/htmlpad/htmlpad_dot_org",
-    require => Exec['htmlpad-virtualenv']
+    source => "puppet:///modules/htmlpad/htmlpad.org",
   }
 
-  file { "$wsgiDir":
-    ensure => directory,
-    recurse => true,
-    source => "puppet:///modules/htmlpad/wsgi",
-    require => Exec['htmlpad-virtualenv']
-  }
-
-  file { "$rootDir/manage.py":
-    source => "puppet:///modules/htmlpad/manage.py",
-    require => Exec['htmlpad-virtualenv']
-  }
-
-  file { "$projectDir/settings_local.py":
+  file { "$rootDir/src/htmlpad_dot_org/settings_local.py":
     content => template("htmlpad/settings_local.py.erb"),
-    require => File["$projectDir"],
+    require => File["$rootDir"],
   }
 
   exec { 'htmlpad-virtualenv':
     command => "/usr/bin/virtualenv $rootDir",
-    require => Package['python-virtualenv'],
+    require => [ Package['python-virtualenv'], File["$rootDir"] ]
+  }
+
+  file { "$sitePackagesDir/htmlpad_dot_org":
+    ensure => link,
+    target => "$rootDir/src/htmlpad_dot_org",
+    require => Exec['htmlpad-virtualenv']
+  }
+
+  vcsrepo { "$repoDir":
+    ensure => present,
+    source => "git://github.com/toolness/htmlpad.git"
   }
 
   exec { 'install-htmlpad':
@@ -51,21 +48,19 @@ class htmlpad {
   exec { 'collect-htmlpad-staticfiles':
     command => "$python manage.py collectstatic --noinput",
     cwd => "$rootDir",
-    require => [ File["$rootDir/manage.py"], Exec['install-htmlpad'] ]
+    require => [ Exec['install-htmlpad'],
+                 File["$rootDir/src/htmlpad_dot_org/settings_local.py"],
+                 File["$sitePackagesDir/htmlpad_dot_org"] ]
   }
   
   exec { 'run-htmlpad-tests':
     command => "$python manage.py test",
     cwd => "$rootDir",
-    require => [ Exec['collect-htmlpad-staticfiles'] ]
+    require => Exec['collect-htmlpad-staticfiles']
   }
 
   apache2::vhost { "$site":
-    content => template("htmlpad/apache-site.conf.erb")    
-  }
-
-  vcsrepo { "$repoDir":
-    ensure => present,
-    source => "git://github.com/toolness/htmlpad.git"
+    content => template("htmlpad/apache-site.conf.erb"),
+    require => Exec['run-htmlpad-tests']
   }
 }
