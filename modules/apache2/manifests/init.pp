@@ -1,6 +1,9 @@
 class apache2 {
   $apacheDir = '/etc/apache2'
 
+  # TODO: This configuration seems to be assuming that libapache2-mod-wsgi
+  # is the same as libapache2, which is false. Ideally we should separate
+  # out libapache2 and mod-wsgi into different dependencies.
   package { 'libapache2-mod-wsgi':
     ensure => present,
   }
@@ -10,6 +13,7 @@ class apache2 {
     enable => true,
     hasrestart => true,
     hasstatus => true,
+    require => Package['libapache2-mod-wsgi']
   }
 
   # Don't let the default site interfere with our
