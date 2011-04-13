@@ -8,6 +8,10 @@ class testswarm {
   $user = $db
   $pw = "change_me"
 
+  package { 'curl':
+    ensure => present
+  }
+
   package { 'libapache2-mod-php5':
     ensure => present,
     notify => Service['apache2']
@@ -45,5 +49,11 @@ class testswarm {
 
   apache2::vhost { "$site":
     content => template("testswarm/apache-site.conf.erb"),
+  }
+  
+  cron { "testswarm-wipe":
+    command => "curl -s --header \"Host: $site\" http://127.0.0.1/?state=wipe > /dev/null",
+    user => "www-data",
+    require => Package['curl']
   }
 }
