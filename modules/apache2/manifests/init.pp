@@ -1,4 +1,6 @@
 class apache2 {
+  $apacheDir = '/etc/apache2'
+
   package { 'libapache2-mod-wsgi':
     ensure => present,
   }
@@ -10,12 +12,18 @@ class apache2 {
     hasstatus => true,
   }
 
+  # Don't let the default site interfere with our
+  # virtual hosts.
+  file { "$apacheDir/sites-enabled/000-default":
+    ensure => absent,
+    notify => Service['apache2'],
+    require => Package['libapache2-mod-wsgi'],
+  }
+
   define vhost($content) {
     include apache2
 
-    $apacheDir = '/etc/apache2'
-
-    file { "$apacheDir/sites-available/$name":
+    file { "$apache2::apacheDir/sites-available/$name":
       ensure => file,
       owner => 'root',
       group => 'root',
@@ -24,9 +32,9 @@ class apache2 {
       require => Package['libapache2-mod-wsgi'],
     }
 
-    file { "$apacheDir/sites-enabled/001-$name":
+    file { "$apache2::apacheDir/sites-enabled/001-$name":
       ensure => link,
-      target => "$apacheDir/sites-available/$name",
+      target => "$apache2::apacheDir/sites-available/$name",
       notify => Service['apache2'],
     }
   }
