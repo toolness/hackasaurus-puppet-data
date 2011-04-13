@@ -24,6 +24,7 @@ class htmlpad {
   }
 
   exec { 'htmlpad-virtualenv':
+    unless => "/usr/bin/stat $rootDir/bin/python",
     command => "/usr/bin/virtualenv $rootDir",
     require => [ Package['python-virtualenv'], File["$rootDir"] ]
   }
