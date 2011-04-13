@@ -33,6 +33,7 @@ if __name__ == '__main__':
            'The platform should be Ubuntu 10.10 (maverick).')
     os.environ['DEBIAN_FRONTEND'] = 'noninteractive'
     run(['apt-get', '-q', '-y', 'install'] + REQUIRED_PACKAGES)
-    run(['puppet', 'apply', '-v', '--modulepath', '%s/modules' % ROOT_DIR,
+    run(['puppet', 'apply', '-v', '-d',
+         '--modulepath', '%s/modules' % ROOT_DIR,
          '%s/manifests/site.pp' % ROOT_DIR])
     print "Server configuration successfully updated."
