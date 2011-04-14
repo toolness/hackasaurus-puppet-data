@@ -12,15 +12,46 @@ class htmlpad {
     ensure => present,
   }
 
+  # The directory structure here avoids using recurse on dirs
+  # that will have lots of files installed into them, so that
+  # puppet isn't slowed down hashing a bunch of files that it
+  # won't need to consult again.
+
   file { "$rootDir":
     ensure => directory,
-    recurse => true,
-    source => "puppet:///modules/htmlpad/htmlpad.org",
   }
 
+  file { "$rootDir/manage.py":
+    ensure => file,
+    source => "puppet:///modules/htmlpad/htmlpad.org/manage.py",
+  }
+
+  file { "$rootDir/wsgi":
+    ensure => directory,
+    require => File["$rootDir"]
+  }
+    
+  file { "$rootDir/wsgi/htmlpad.wsgi":
+    ensure => file,
+    source => "puppet:///modules/htmlpad/htmlpad.org/wsgi/htmlpad.wsgi",
+    require => File["$rootDir/wsgi"]
+  }
+
+  file { "$rootDir/src":
+    ensure => directory,
+    require => File["$rootDir"]
+  }
+
+  file { "$rootDir/src/htmlpad_dot_org":
+    ensure => directory,
+    recurse => true,
+    source => "puppet:///modules/htmlpad/htmlpad.org/src/htmlpad_dot_org",
+    require => File["$rootDir/src"]
+  }
+    
   file { "$rootDir/src/htmlpad_dot_org/settings_local.py":
     content => template("htmlpad/settings_local.py.erb"),
-    require => File["$rootDir"],
+    require => File["$rootDir/src/htmlpad_dot_org"],
   }
 
   exec { 'htmlpad-virtualenv':
@@ -37,7 +68,8 @@ class htmlpad {
 
   vcsrepo { "$repoDir":
     ensure => present,
-    source => "git://github.com/toolness/htmlpad.git"
+    source => "git://github.com/toolness/htmlpad.git",
+    require => File["$rootDir/src"]
   }
 
   exec { 'install-htmlpad':
