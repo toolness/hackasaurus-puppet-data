@@ -24,6 +24,11 @@ def vhostreq(url):
     except urllib2.HTTPError, e:
         return e
 
+class TestswarmTests(unittest.TestCase):
+    def testHomePageIsAccessible(self):
+        f = vhostreq('http://swarm.hksr.us/')
+        self.assertTrue('Welcome to the TestSwarm' in f.read())
+
 class HtmlpadTests(unittest.TestCase):
     def testHomePageIsAccessible(self):
         f = vhostreq('http://htmlpad.org/')
