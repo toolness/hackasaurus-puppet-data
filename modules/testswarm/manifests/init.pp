@@ -36,7 +36,7 @@ class testswarm {
   
   vcsrepo { "$wwwDir":
     ensure => "present",
-    source => "https://github.com/jquery/testswarm.git",
+    source => "https://github.com/toolness/testswarm.git",
     require => File["$rootDir"]
   }
   
