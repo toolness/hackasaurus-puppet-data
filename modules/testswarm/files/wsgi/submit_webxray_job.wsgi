@@ -38,7 +38,6 @@ SUITE_NAME = "main"
 SUITE_URL = "%(relative_url_base)s/%(short_rev)s/test/"
 
 GIT_REPO = "https://github.com/hackasaurus/webxray.git"
-JQUERY_GIT_REPO = "https://github.com/jquery/jquery.git"
 
 def debug_app(func):
     def wrapper(env, start):
@@ -102,11 +101,6 @@ def submit_job(base_checkout_dir, user, auth_token, host, web_root_dir):
     if not base_checkout_dir.startswith(web_root_dir):
         raise AssertionError("base checkout dir should be under web root")
     relative_url_base = base_checkout_dir[len(web_root_dir):]
-    jquery_dir = os.path.join(base_checkout_dir, 'jquery')
-    if not os.path.exists(jquery_dir):
-        subprocess.check_call(['git', 'clone', JQUERY_GIT_REPO],
-                              cwd=base_checkout_dir)
-        subprocess.check_call(['make'], cwd=jquery_dir)
     if not os.path.exists(os.path.join(base_checkout_dir, '.git')):
         subprocess.check_call(['git', 'clone', GIT_REPO, '.'],
                               cwd=base_checkout_dir)
@@ -116,12 +110,13 @@ def submit_job(base_checkout_dir, user, auth_token, host, web_root_dir):
         export_dir = os.path.join(base_checkout_dir, short_rev)
         if not os.path.exists(export_dir):
             export_tree(base_checkout_dir, rev, export_dir)
-            os.symlink(jquery_dir,
-                       os.path.join(export_dir, 'jquery'))
-            subprocess.check_call(
-                [sys.executable, 'go.py', 'compile'],
-                cwd=export_dir
-                )
+            retval = subprocess.call([sys.executable, 'go.py', 'compile'],
+                                     cwd=export_dir)
+            if retval != 0:
+                # TODO: Shoot, maybe this build is broken. We should keep
+                # trying other revisions, though, so don't bail. We might
+                # want to log a failure at some point though.
+                pass
             args = {
                 'state': 'addjob',
                 'output': 'dump',

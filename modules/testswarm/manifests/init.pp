@@ -12,14 +12,6 @@ class testswarm {
   $swarmuser = "hackasaurus"
   $jobCheckoutDir = "$wwwDir/git"
 
-  package { 'make':
-    ensure => present
-  }
-  
-  package { 'nodejs':
-    ensure => present
-  }
-
   package { 'python-mysqldb':
     ensure => present
   }
@@ -98,8 +90,7 @@ class testswarm {
     ensure => directory,
     recurse => true,
     source => "puppet:///modules/testswarm/wsgi",
-    require => [ File["$rootDir"], Package["python-mysqldb"],
-                 Package["nodejs"], Package["make"] ],
+    require => [ File["$rootDir"], Package["python-mysqldb"] ],
     notify => Service["apache2"]
   }
   
