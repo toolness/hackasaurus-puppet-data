@@ -73,6 +73,9 @@ class testswarm {
     exec { "add-testswarm-user-$name":
       command => "/usr/bin/curl --header \"Host: $testswarm::site\" -d \"username=$name&password=$password&email=$email&request=$request\" http://127.0.0.1/signup/",
       require => Package['curl']
+      # TODO: We need to require more here, because otherwise this request
+      # could just fail if we haven't yet set up the testswarm
+      # PHP files, config files, and schema.
     }
   }
 
