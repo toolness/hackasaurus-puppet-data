@@ -23,8 +23,14 @@ def run(cmdline, *args, **kwargs):
     print "Running '%s'..." % ' '.join(cmdline)
     sys.stdout.flush()
     sys.stderr.flush()
-    return subprocess.check_call(cmdline, *args, **kwargs)
-    
+    result = subprocess.call(cmdline, *args, **kwargs)
+    if result != 0:
+        print "Process '%s' returned exit code %d, aborting." % (
+            cmdline[0],
+            result
+            )
+        sys.exit(1)
+
 if __name__ == '__main__':
     print "Examining system configuration..."
 

@@ -33,4 +33,7 @@ if __name__ == '__main__':
         'rm /root/payload.tgz',
         'python tools/setup_server.py'
         ]
-    subprocess.check_call(ssh_args + [';'.join(remote_cmds)])
+    result = subprocess.call(ssh_args + [';'.join(remote_cmds)])
+    if result != 0:
+        print "Deployment failed."
+        sys.exit(1)
