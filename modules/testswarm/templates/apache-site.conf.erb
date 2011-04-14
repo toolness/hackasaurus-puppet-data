@@ -2,11 +2,28 @@
   ServerName <%= site %>
   ServerAlias <%= site %>.dev
 
-  DocumentRoot <%= rootDir %>/
-  <Directory <%= rootDir %>/>
+  DocumentRoot <%= wwwDir %>/
+  <Directory <%= wwwDir %>/>
     Options Indexes FollowSymLinks MultiViews
     AllowOverride All
     Order allow,deny
     allow from all
+  </Directory>
+
+  SetEnv swarm_host <%= site %>
+  SetEnv swarm_db_host localhost
+  SetEnv swarm_db_user <%= user %>
+  SetEnv swarm_db_pass <%= pw %>
+  SetEnv swarm_db_name <%= db %>
+  SetEnv swarm_job_user <%= swarmuser %>
+  SetEnv swarm_checkout_dir <%= jobCheckoutDir %>
+  SetEnv swarm_web_root_dir <%= wwwDir %>
+
+  WSGIDaemonProcess <%= site %> processes=1 threads=5
+  WSGIProcessGroup <%= site %>
+  WSGIScriptAlias /wsgi/ <%= wsgiDir %>/
+  <Directory <%= wsgiDir %>>
+    Order allow,deny
+    Allow from all
   </Directory>
 </VirtualHost>

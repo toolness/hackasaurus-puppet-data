@@ -29,6 +29,10 @@ class TestswarmTests(unittest.TestCase):
         f = vhostreq('http://swarm.hksr.us/')
         self.assertTrue('Welcome to the TestSwarm' in f.read())
 
+    def testSubmitJobWorks(self):
+        f = vhostreq('http://swarm.hksr.us/wsgi/submit_webxray_job.wsgi')
+        self.assertEqual(f.read(), "job submitted")
+
 class HtmlpadTests(unittest.TestCase):
     def testHomePageIsAccessible(self):
         f = vhostreq('http://htmlpad.org/')

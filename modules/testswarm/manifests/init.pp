@@ -4,9 +4,25 @@ class testswarm {
 
   $site = "swarm.hksr.us"
   $rootDir = "/var/$site"
+  $wsgiDir = "$rootDir/wsgi"
+  $wwwDir = "$rootDir/www"
   $db = "testswarm"
   $user = $db
   $pw = "change_me"
+  $swarmuser = "hackasaurus"
+  $jobCheckoutDir = "$wwwDir/git"
+
+  package { 'make':
+    ensure => present
+  }
+  
+  package { 'nodejs':
+    ensure => present
+  }
+
+  package { 'python-mysqldb':
+    ensure => present
+  }
 
   package { 'curl':
     ensure => present
@@ -26,19 +42,21 @@ class testswarm {
     password => $pw
   }
   
-  vcsrepo { "$rootDir":
+  vcsrepo { "$wwwDir":
     ensure => "present",
-    source => "https://github.com/jquery/testswarm.git"
+    source => "https://github.com/jquery/testswarm.git",
+    require => File["$rootDir"]
   }
   
   exec { "install-testswarm-schema":
     unless => "/usr/bin/mysql $db -u$user -p$pw -e \"SELECT COUNT(*) FROM clients\"",
-    command => "/bin/cat $rootDir/config/testswarm.sql $rootDir/config/useragents.sql | /usr/bin/mysql $db -u$user -p$pw",
-    require => [ Mysql::Db["$db"], Vcsrepo["$rootDir"] ]
+    command => "/bin/cat $wwwDir/config/testswarm.sql $wwwDir/config/useragents.sql | /usr/bin/mysql $db -u$user -p$pw",
+    require => [ Mysql::Db["$db"], Vcsrepo["$wwwDir"] ]
   }
 
-  file { "$rootDir/config.ini":
-    content => template("testswarm/config.ini.erb")
+  file { "$wwwDir/config.ini":
+    content => template("testswarm/config.ini.erb"),
+    require => Vcsrepo["$wwwDir"]
   }
   
   file { "$apache2::apacheDir/mods-enabled/rewrite.load":
@@ -66,9 +84,29 @@ class testswarm {
     }
   }
 
-  swarmuser { 'hackasaurus':
+  swarmuser { "$swarmuser":
     password => 'change_me',
     email => 'change_me@changeme.com',
     request => 'account-for-hackasaurus-projects'
+  }
+  
+  file { "$rootDir":
+    ensure => directory
+  }
+  
+  file { "$wsgiDir":
+    ensure => directory,
+    recurse => true,
+    source => "puppet:///modules/testswarm/wsgi",
+    require => [ File["$rootDir"], Package["python-mysqldb"],
+                 Package["nodejs"], Package["make"] ],
+    notify => Service["apache2"]
+  }
+  
+  file { "$jobCheckoutDir":
+    ensure => directory,
+    owner => 'www-data',
+    group => 'www-data',
+    require => Vcsrepo["$wwwDir"]
   }
 }
