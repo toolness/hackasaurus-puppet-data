@@ -37,6 +37,7 @@ BROWSERS = "popularbeta"
 SUITE_NAME = "main"
 SUITE_URL = "%(relative_url_base)s/%(short_rev)s/test/"
 
+PROJECT_NAME = "webxray"
 GIT_REPO = "https://github.com/hackasaurus/webxray.git"
 
 def debug_app(func):
@@ -100,16 +101,18 @@ def export_tree(repo_dir, rev, export_dir, gitcmd='git', tarcmd='tar'):
 def submit_job(base_checkout_dir, user, auth_token, host, web_root_dir):
     if not base_checkout_dir.startswith(web_root_dir):
         raise AssertionError("base checkout dir should be under web root")
-    relative_url_base = base_checkout_dir[len(web_root_dir):]
-    if not os.path.exists(os.path.join(base_checkout_dir, '.git')):
-        subprocess.check_call(['git', 'clone', GIT_REPO, '.'],
-                              cwd=base_checkout_dir)
-    subprocess.check_call(['git', 'pull'], cwd=base_checkout_dir)
-    for rev in get_latest_revs(base_checkout_dir):
+    project_job_dir = os.path.join(base_checkout_dir, PROJECT_NAME)
+    relative_url_base = project_job_dir[len(web_root_dir):]
+    if os.path.exists(project_job_dir):
+        subprocess.check_call(['git', 'pull'], cwd=project_job_dir)
+    else:
+        subprocess.check_call(['git', 'clone', GIT_REPO, project_job_dir])
+
+    for rev in get_latest_revs(project_job_dir):
         short_rev = rev[:20]
-        export_dir = os.path.join(base_checkout_dir, short_rev)
+        export_dir = os.path.join(project_job_dir, short_rev)
         if not os.path.exists(export_dir):
-            export_tree(base_checkout_dir, rev, export_dir)
+            export_tree(project_job_dir, rev, export_dir)
             retval = subprocess.call([sys.executable, 'go.py', 'compile'],
                                      cwd=export_dir)
             if retval != 0:

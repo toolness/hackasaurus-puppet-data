@@ -10,7 +10,7 @@ class testswarm {
   $user = $db
   $pw = "change_me"
   $swarmuser = "hackasaurus"
-  $jobCheckoutDir = "$wwwDir/git"
+  $jobCheckoutDir = "$wwwDir/jobs"
 
   package { 'python-mysqldb':
     ensure => present
