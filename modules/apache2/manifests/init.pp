@@ -40,6 +40,7 @@ class apache2 {
       ensure => link,
       target => "$apache2::apacheDir/sites-available/$name",
       notify => Service['apache2'],
+      require => Package['libapache2-mod-wsgi'],
     }
   }
 }
