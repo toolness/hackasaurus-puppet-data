@@ -14,6 +14,13 @@ class hackasaurus {
     source => "git://github.com/hackasaurus/hackasaurus.org.git"
   }
 
+  file { "$rootDir":
+    require => Vcsrepo["$rootDir"],
+    recurse => true,
+    owner => 'www-data',
+    group => 'www-data'
+  }
+
   file { "$recruitmentFormsDir":
     ensure => directory,
     owner => 'www-data',
