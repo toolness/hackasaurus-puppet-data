@@ -43,6 +43,10 @@ class HtmlpadTests(unittest.TestCase):
         self.assertTrue('John Resig' in f.read())
 
 class HackasaurusTests(unittest.TestCase):
+    def testUpdateWorks(self):
+        f = vhostreq('http://hackasaurus.org/wsgi/update-site')
+        self.assertEqual(f.read(), '0')
+
     def testHomePageIsAccessible(self):
         f = vhostreq('http://hackasaurus.org/')
         self.assertTrue('Hackasaurus' in f.read())
