@@ -13,12 +13,4 @@
     Order allow,deny
     allow from all
   </Directory>
-
-  WSGIDaemonProcess <%= site %> processes=1 threads=15
-  WSGIProcessGroup <%= site %>
-  WSGIScriptAlias /wsgi <%= wsgiDir %>/hackasaurus_dot_org.py
-
-  SetEnv recruitment.max_size 50000
-  SetEnv recruitment.turing_answer hackasaurus
-  SetEnv recruitment.output_dir <%= recruitmentFormsDir %>
 </VirtualHost>

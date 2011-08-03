@@ -1,9 +1,7 @@
 class hackasaurus {
   $site = 'hackasaurus.org'
   $rootDir = '/var/hackasaurus.org'
-  $wsgiDir = "$rootDir/wsgi-scripts"
   $staticFilesDir = "$rootDir/static-files"
-  $recruitmentFormsDir = "$rootDir/recruitment-forms"
 
   apache2::vhost { "$site":
     content => template("hackasaurus/apache-site.conf.erb")
@@ -19,12 +17,5 @@ class hackasaurus {
     recurse => true,
     owner => 'www-data',
     group => 'www-data'
-  }
-
-  file { "$recruitmentFormsDir":
-    ensure => directory,
-    owner => 'www-data',
-    group => 'www-data',
-    require => Vcsrepo["$rootDir"],
   }
 }
