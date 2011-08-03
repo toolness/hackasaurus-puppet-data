@@ -35,8 +35,8 @@ if __name__ == '__main__':
     print "Examining system configuration..."
 
     ensure(os.geteuid() == 0, 'This script must be run as root.')
-    prefer(platform.platform().endswith('-Ubuntu-10.10-maverick'),
-           'The platform should be Ubuntu 10.10 (maverick).')
+    prefer(platform.platform().endswith('-Ubuntu-11.04-natty'),
+           'The platform should be Ubuntu 11.04 (natty).')
     os.environ['DEBIAN_FRONTEND'] = 'noninteractive'
     run(['apt-get', '-q', '-y', 'install'] + REQUIRED_PACKAGES)
     run(['puppet', 'apply', '-v', '-d',

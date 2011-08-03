@@ -4,7 +4,7 @@ class htmlpad {
   $rootDir = '/var/htmlpad.org'
   $repoDir = "$rootDir/src/htmlpad"
   $python = "$rootDir/bin/python"
-  $sitePackagesDir = "$rootDir/lib/python2.6/site-packages"
+  $sitePackagesDir = "$rootDir/lib/python$python_version/site-packages"
   $staticFilesDir = "$rootDir/static"
   $wsgiDir = "$rootDir/wsgi"
 
