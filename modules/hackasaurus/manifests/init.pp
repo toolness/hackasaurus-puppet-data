@@ -1,6 +1,7 @@
 class hackasaurus {
   $site = 'hackasaurus.org'
   $rootDir = '/var/hackasaurus.org'
+  $wsgiDir = "$rootDir/wsgi-scripts"
   $staticFilesDir = "$rootDir/static-files"
 
   apache2::vhost { "$site":
