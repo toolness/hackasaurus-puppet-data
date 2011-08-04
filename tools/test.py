@@ -52,8 +52,8 @@ class HackasaurusTests(unittest.TestCase):
         self.assertTrue('Hackasaurus' in f.read())
 
     def testWSGIDirIsAccessible(self):
-        e = vhostreq('http://hackasaurus.org/wsgi/recruit-me')
-        self.assertEqual(e.code, 405)
+        e = vhostreq('http://hackasaurus.org/wsgi/update-site')
+        self.assertEqual(e.code, 200)
 
 class TestProgram:
     """A command-line program that runs a set of tests. Taken
