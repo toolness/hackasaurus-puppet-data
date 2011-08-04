@@ -60,6 +60,15 @@ class HackasaurusTests(unittest.TestCase):
         self.assertEqual(e.code, 200)
         self.assertEqual(e.geturl(), "http://hackasaurus.org/blog/")
 
+class JsbinTests(unittest.TestCase):
+    def testRootIsAccessible(self):
+        e = vhostreq('http://webpad.hackasaurus.org/')
+        self.assertEqual(e.code, 200)
+        
+    def testRewriteRulesWork(self):
+        e = vhostreq('http://webpad.hackasaurus.org/js/debug/jsbin.js')
+        self.assertEqual(e.code, 200)
+
 class TestProgram:
     """A command-line program that runs a set of tests. Taken
     from unittest and modified.
