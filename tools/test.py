@@ -55,6 +55,11 @@ class HackasaurusTests(unittest.TestCase):
         e = vhostreq('http://hackasaurus.org/wsgi/update-site')
         self.assertEqual(e.code, 200)
 
+    def testRedirectsWork(self):
+        e = vhostreq('http://hackasaurus.org/news/')
+        self.assertEqual(e.code, 200)
+        self.assertEqual(e.geturl(), "http://hackasaurus.org/blog/")
+
 class TestProgram:
     """A command-line program that runs a set of tests. Taken
     from unittest and modified.
