@@ -1,0 +1,12 @@
+<VirtualHost *:80>
+  ServerName <%= site %>
+  ServerAlias <%= site %>.dev
+
+  DocumentRoot <%= wwwDir %>/
+  <Directory <%= wwwDir %>/>
+    Options Indexes FollowSymLinks MultiViews
+    AllowOverride All
+    Order allow,deny
+    allow from all
+  </Directory>
+</VirtualHost>

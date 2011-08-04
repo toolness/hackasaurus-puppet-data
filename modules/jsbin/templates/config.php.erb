@@ -1,0 +1,22 @@
+<?php
+// database settings
+define('DB_NAME', '<%= db %>');
+define('DB_USER', '<%= user %>');  // Your MySQL username
+define('DB_PASSWORD', '<%= pw %>'); // ...and password
+define('DB_HOST', 'localhost');  // 99% chance you won't need to change this value
+
+// change this to suite your offline detection
+
+// TODO: This should really be 'false', but we'll have to introduce a
+//       build step into the puppet manifest for that.
+define('OFFLINE', true);
+
+define('HOST', 'http://<%= site %>/');
+
+// if you're running from a subdirectory, change this to the start of the
+// url, i.e. offline.jsbin.com/foobar/ - ROOT would be foobar
+define('ROOT', '/');
+
+// wishing PHP were more like JavaScript...wishing I was able to use Node.js they way I had wanted...
+define('VERSION', OFFLINE ? 'debug' : trim(file_get_contents('VERSION')));
+?>
