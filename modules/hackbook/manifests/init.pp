@@ -1,17 +1,17 @@
-class hackasaurus {
-  $site = 'hackasaurus.org'
-  $rootDir = '/var/hackasaurus.org'
+class hackbook {
+  $site = 'hackbook.hackasaurus.org'
+  $rootDir = '/var/hackbook'
   $wsgiDir = "$rootDir/wsgi-scripts"
   $staticFilesDir = "$rootDir/build"
 
   apache2::vhost { "$site":
-    content => template("hackasaurus/apache-site.conf.erb"),
+    content => template("hackbook/apache-site.conf.erb"),
     require => Exec["update-$site"]
   }
 
   vcsrepo { "$rootDir":
     ensure => present,
-    source => "git://github.com/hackasaurus/hackasaurus.org.git"
+    source => "git://github.com/hackasaurus/hackbook.git"
   }
 
   file { "$rootDir":

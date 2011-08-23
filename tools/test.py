@@ -6,6 +6,7 @@ import os
 import unittest
 import urllib2
 import urlparse
+import json
 
 server = None
 
@@ -42,18 +43,27 @@ class HtmlpadTests(unittest.TestCase):
         f = vhostreq('http://htmlpad.org/static/js/jquery.min.js')
         self.assertTrue('John Resig' in f.read())
 
+class HackbookTests(unittest.TestCase):
+    def testUpdateWorks(self):
+        f = vhostreq('http://hackbook.hackasaurus.org/wsgi/update-site')
+        for retval in json.loads(f.read()):
+            self.assertEqual(retval, 0)
+        self.assertEqual(f.code, 200)
+
+    def testHomePageIsAccessible(self):
+        f = vhostreq('http://hackbook.hackasaurus.org/')
+        self.assertTrue('Hackbook' in f.read())
+
 class HackasaurusTests(unittest.TestCase):
     def testUpdateWorks(self):
         f = vhostreq('http://hackasaurus.org/wsgi/update-site')
-        self.assertEqual(f.read(), '0')
+        for retval in json.loads(f.read()):
+            self.assertEqual(retval, 0)
+        self.assertEqual(f.code, 200)
 
     def testHomePageIsAccessible(self):
         f = vhostreq('http://hackasaurus.org/')
         self.assertTrue('Hackasaurus' in f.read())
-
-    def testWSGIDirIsAccessible(self):
-        e = vhostreq('http://hackasaurus.org/wsgi/update-site')
-        self.assertEqual(e.code, 200)
 
     def testRedirectsWork(self):
         e = vhostreq('http://hackasaurus.org/news/')
