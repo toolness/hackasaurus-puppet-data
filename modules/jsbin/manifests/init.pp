@@ -16,7 +16,7 @@ class jsbin {
 
   vcsrepo { "$wwwDir":
     ensure => "present",
-    source => "https://toolness@github.com/hackasaurus/jsbin.git",
+    source => "https://github.com/hackasaurus/jsbin.git",
     require => File["$rootDir"]
   }
 
