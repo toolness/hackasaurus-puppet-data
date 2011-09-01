@@ -4,7 +4,7 @@ class jsbin {
   $wwwDir = "$rootDir/www"
   $db = "jsbin"
   $user = $db
-  $pw = "change_me"
+  $pw = $secret_jsbin_pw
 
   include mysql
   include apache2

@@ -5,7 +5,7 @@ class testswarm {
   $wwwDir = "$rootDir/www"
   $db = "testswarm"
   $user = $db
-  $pw = "change_me"
+  $pw = $secret_testswarm_pw
   $swarmuser = "hackasaurus"
   $jobCheckoutDir = "$wwwDir/jobs"
   
