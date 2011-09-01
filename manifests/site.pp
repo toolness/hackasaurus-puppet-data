@@ -1,4 +1,4 @@
-$mysql_password = "change_me"
+$secret_mysql_root_pw = "change_me"
 $secret_jsbin_pw = "change_me"
 $secret_testswarm_pw = "change_me"
 $secret_swarmuser_pw = "change_me"
