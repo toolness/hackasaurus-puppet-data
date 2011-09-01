@@ -15,9 +15,9 @@ class mysql {
   }
   
   exec { 'set-mysql-password':
-    unless => "mysqladmin -uroot -p$secret_mysql_root_pw status",
+    unless => "mysqladmin -uroot -p$secrets::mysql_root_pw status",
     path => ["/bin", "/usr/bin"],
-    command => "mysqladmin -uroot password $secret_mysql_root_pw",
+    command => "mysqladmin -uroot password $secrets::mysql_root_pw",
     require => Service['mysql'],
   }
   
@@ -26,7 +26,7 @@ class mysql {
     
     exec { "create-${name}-db":
       unless => "/usr/bin/mysql -u${user} -p${password} ${name}",
-      command => "/usr/bin/mysql -uroot -p$secret_mysql_root_pw -e \"create database ${name}; grant all on ${name}.* to ${user}@localhost identified by '$password';\"",
+      command => "/usr/bin/mysql -uroot -p$secrets::mysql_root_pw -e \"create database ${name}; grant all on ${name}.* to ${user}@localhost identified by '$password';\"",
       require => Exec['set-mysql-password']
     }
   }

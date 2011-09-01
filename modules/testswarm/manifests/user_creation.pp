@@ -9,8 +9,8 @@ class testswarm::user_creation {
   }
 
   swarmuser { "$swarmuser":
-    password => $secret_swarmuser_pw,
-    email => $secret_swarmuser_email,
+    password => $secrets::swarmuser_pw,
+    email => $secrets::swarmuser_email,
     request => 'account-for-hackasaurus-projects'
   }
 }

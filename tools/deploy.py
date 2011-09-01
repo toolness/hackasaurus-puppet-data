@@ -4,6 +4,8 @@ import os
 import sys
 import subprocess
 
+from build_secrets_manifest import build_secrets_manifest
+
 MY_DIR = os.path.dirname(__file__)
 
 if __name__ == '__main__':
@@ -11,6 +13,8 @@ if __name__ == '__main__':
         print "usage: %s <server-name>" % sys.argv[0]
         sys.exit(1)
     server = sys.argv[1]
+
+    build_secrets_manifest()
 
     # We're going to have to use tar here instead of git archive,
     # as git archive doesn't deal with submodules and the
