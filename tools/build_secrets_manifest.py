@@ -1,5 +1,4 @@
 import os
-import sys
 import json
 from distutils.dir_util import mkpath
 
@@ -14,10 +13,6 @@ def _make_manifest_text(secrets):
 
 def build_secrets_manifest():
     json_filename = os.path.join(MY_DIR, "..", "secrets.json")
-    if not os.path.exists(json_filename):
-        print "secrets.json not found! please copy secrets.sample.json to "
-        print "secrets.json and modify it as necessary."
-        sys.exit(1)
     f = open(json_filename, 'r')
     secrets = json.load(f)
     dirname = os.path.join(MY_DIR, "..", "modules", "secrets", "manifests")
