@@ -7,8 +7,16 @@ import unittest
 import urllib2
 import urlparse
 import json
+import subprocess
+
+ROOT = os.path.abspath(os.path.dirname(__file__))
+
+def path(*x):
+    return os.path.join(ROOT, *x)
 
 server = None
+
+secrets = json.load(open(path('..', 'secrets.json')))
 
 def vhostreq(url):
     parts = urlparse.urlparse(url)
@@ -25,7 +33,20 @@ def vhostreq(url):
     except urllib2.HTTPError, e:
         return e
 
+def try_mysql_login(username, pw, db):
+    cmd = 'mysql -u %s -p%s -D %s -e "show tables;"' % (username, pw, db)
+    ssh_args = ['ssh', 'root@%s' % server, cmd]
+    popen = subprocess.Popen(ssh_args,
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.STDOUT)
+    out, err = popen.communicate()
+    if popen.returncode:
+        raise Exception(out)
+
 class TestswarmTests(unittest.TestCase):
+    def testDatabaseLoginWorks(self):
+        try_mysql_login('testswarm', secrets['testswarm_pw'], 'testswarm')
+
     def testHomePageIsAccessible(self):
         f = vhostreq('http://swarm.hksr.us/')
         self.assertTrue('Welcome to the TestSwarm' in f.read())
@@ -70,7 +91,14 @@ class HackasaurusTests(unittest.TestCase):
         self.assertEqual(e.code, 200)
         self.assertEqual(e.geturl(), "http://hackasaurus.org/blog/")
 
+class MysqlTests(unittest.TestCase):
+    def testRootLoginWorks(self):
+        try_mysql_login('root', secrets['mysql_root_pw'], 'mysql')
+
 class JsbinTests(unittest.TestCase):
+    def testDatabaseLoginWorks(self):
+        try_mysql_login('jsbin', secrets['jsbin_pw'], 'jsbin')
+
     def testRootIsAccessible(self):
         e = vhostreq('http://webpad.hackasaurus.org/')
         self.assertEqual(e.code, 200)
