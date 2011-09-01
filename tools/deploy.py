@@ -31,10 +31,16 @@ if __name__ == '__main__':
                           stdin=tarfile.stdout)
     remote_cmds = [
         'rm -rf /var/hackasaurus-puppet-data',
-        'mkdir /var/hackasaurus-puppet-data',
-        'cd /var/hackasaurus-puppet-data',
+        'rm -rf /root/hackasaurus-puppet-data',
+        'mkdir /root/hackasaurus-puppet-data',
+        'cd /root/hackasaurus-puppet-data',
         'tar -xvf /root/payload.tgz',
         'rm /root/payload.tgz',
+        '/bin/chown root.root /root/hackasaurus-puppet-data',
+        '/bin/chmod 0700 /root/hackasaurus-puppet-data',
+        'cd /root',
+        'mv hackasaurus-puppet-data /var',
+        'cd /var/hackasaurus-puppet-data',
         'python tools/setup_server.py'
         ]
     result = subprocess.call(ssh_args + [';'.join(remote_cmds)])
