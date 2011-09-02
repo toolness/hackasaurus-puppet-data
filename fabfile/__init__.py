@@ -3,9 +3,7 @@ import sys
 from fabric.utils import abort
 from fabric.api import task, env
 
-import deploy as deployment
-import test as testing
-import jsbin
+from . import deployment, testing, jsbin
 
 @task
 def deploy():
