@@ -9,7 +9,7 @@ from . import secrets
 MY_DIR = os.path.dirname(__file__)
 
 def deploy(server):
-    secrets.build_secrets_manifest()
+    secrets.build_secrets_manifest(server)
 
     # We're going to have to use tar here instead of git archive,
     # as git archive doesn't deal with submodules and the
