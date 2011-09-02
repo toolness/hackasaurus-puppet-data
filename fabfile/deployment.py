@@ -36,7 +36,7 @@ def deploy(server):
         'cd /root',
         'mv hackasaurus-puppet-data /var',
         'cd /var/hackasaurus-puppet-data',
-        'python fabfile/run-on-server/setup_server.py'
+        'python fabfile/run-on-server/bootstrap.py'
         ]
     result = subprocess.call(ssh_args + [';'.join(remote_cmds)])
     return result
