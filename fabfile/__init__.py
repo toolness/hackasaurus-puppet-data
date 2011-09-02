@@ -6,17 +6,15 @@ from fabric.utils import abort
 from fabric.api import task, run, env, local
 from fabric.operations import get, put
 
+import deploy as deployment
+import test as testing
+
 ROOT = os.path.abspath(os.path.dirname(__file__))
 
 def path(*x):
     return os.path.join(ROOT, *x)
 
-sys.path.insert(0, path('tools'))
-
-import deploy as deployment
-import test as testing
-
-secrets = json.load(open(path('secrets.json')))
+secrets = json.load(open(path('..', 'secrets.json')))
 
 @task
 def deploy():
