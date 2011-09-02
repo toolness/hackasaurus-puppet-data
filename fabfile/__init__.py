@@ -1,20 +1,11 @@
-import os
 import sys
-import json
 
 from fabric.utils import abort
-from fabric.api import task, run, env, local
-from fabric.operations import get, put
+from fabric.api import task, env
 
 import deploy as deployment
 import test as testing
-
-ROOT = os.path.abspath(os.path.dirname(__file__))
-
-def path(*x):
-    return os.path.join(ROOT, *x)
-
-secrets = json.load(open(path('..', 'secrets.json')))
+import jsbin
 
 @task
 def deploy():
@@ -42,21 +33,3 @@ def test(run=None):
     if run is not None:
         argv.append(run)
     testing.TestProgram(argv=argv, module=testing)
-
-@task
-def jsbin_backup():
-    "retrieve an SQL dump of webpad/jsbin data"
-
-    run('mysqldump -u jsbin -p%(jsbin_pw)s jsbin > jsbin.sql' % secrets)
-    get('jsbin.sql', 'jsbin.%(host)s.dump.sql')
-    run('rm jsbin.sql')
-
-@task
-def jsbin_restore(filename=None):
-    "restore a previous SQL dump of webpad/jsbin data"
-    
-    if filename is None:
-        filename = 'jsbin.%(host)s.dump.sql' % env
-    put(filename, 'jsbin.sql')
-    run('mysql -u jsbin -p%(jsbin_pw)s jsbin < jsbin.sql' % secrets)
-    run('rm jsbin.sql')
