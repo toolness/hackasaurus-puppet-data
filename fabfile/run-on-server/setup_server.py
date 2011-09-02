@@ -4,7 +4,7 @@ import platform
 import subprocess
 
 MY_DIR = os.path.dirname(__file__)
-ROOT_DIR = os.path.abspath('%s/..' % MY_DIR)
+ROOT_DIR = os.path.abspath('%s/../..' % MY_DIR)
 REQUIRED_PACKAGES = [
     "git",
     "puppet"
