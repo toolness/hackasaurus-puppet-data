@@ -24,6 +24,11 @@ To run integration tests on a remote server, run:
 Run `fab -l` for more commands, and `fab -d <command>` for detailed help
 on a particular command.
 
+## Secrets ##
+
+All passwords and other secrets for Hackasaurus applications are stored in 
+`secrets.json`. Feel free to change this as necessary.
+
 ## Local Configuration ##
 
 Virtual hosting configurations are used for the domains of Hackasaurus sites. To make development and testing easy, each site can also be accessed at its normal domain suffixed with .dev.
