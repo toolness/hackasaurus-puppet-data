@@ -1,15 +1,6 @@
-import os
-import json
-
 from fabric.operations import get, put
 from fabric.api import task, run, env
-
-ROOT = os.path.abspath(os.path.dirname(__file__))
-
-def path(*x):
-    return os.path.join(ROOT, *x)
-
-secrets = json.load(open(path('..', 'secrets.json')))
+from . import secrets
 
 @task
 def backup():

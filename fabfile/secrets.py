@@ -2,7 +2,12 @@ import os
 import json
 from distutils.dir_util import mkpath
 
-MY_DIR = os.path.abspath(os.path.dirname(__file__))
+ROOT = os.path.abspath(os.path.dirname(__file__))
+
+def path(*x):
+    return os.path.join(ROOT, *x)
+
+secrets = json.load(open(path('..', 'secrets.json')))
 
 def _make_manifest_text(secrets):
     lines = ["class secrets {"]
@@ -12,10 +17,7 @@ def _make_manifest_text(secrets):
     return "\n".join(lines)
 
 def build_secrets_manifest():
-    json_filename = os.path.join(MY_DIR, "..", "secrets.json")
-    f = open(json_filename, 'r')
-    secrets = json.load(f)
-    dirname = os.path.join(MY_DIR, "..", "modules", "secrets", "manifests")
+    dirname = path("..", "modules", "secrets", "manifests")
     filename = os.path.join(dirname, "init.pp")
     mkpath(dirname)
     open(filename, 'w').write(_make_manifest_text(secrets))
