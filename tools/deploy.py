@@ -8,12 +8,7 @@ from build_secrets_manifest import build_secrets_manifest
 
 MY_DIR = os.path.dirname(__file__)
 
-if __name__ == '__main__':
-    if len(sys.argv) < 2:
-        print "usage: %s <server-name>" % sys.argv[0]
-        sys.exit(1)
-    server = sys.argv[1]
-
+def deploy(server):
     build_secrets_manifest()
 
     # We're going to have to use tar here instead of git archive,
@@ -44,6 +39,14 @@ if __name__ == '__main__':
         'python tools/setup_server.py'
         ]
     result = subprocess.call(ssh_args + [';'.join(remote_cmds)])
-    if result != 0:
+    return result
+
+if __name__ == '__main__':
+    if len(sys.argv) < 2:
+        print "usage: %s <server-name>" % sys.argv[0]
+        sys.exit(1)
+    server = sys.argv[1]
+
+    if deploy(server) != 0:
         print "Deployment failed."
         sys.exit(1)

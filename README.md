@@ -2,9 +2,27 @@ This is an attempt to concisely define and document the server configuration for
 
 Deployment is assumed to target a bare Ubuntu natty server (11.04). All other dependencies are automatically installed by the various configuration files in this repository.
 
-If your SSH key can be used to access the remote server as root, then you can run `tools/deploy.py` to deploy Hackasaurus applications to the remote server.
+## Prerequisites ##
 
-You can also run `tools/test.py` to run integration tests against the remote server.
+You'll need [Fabric][].
+
+In order to deploy and test, you'll also need to set up `ssh` such that
+it's possible to access the remote server as root, e.g. by setting up
+a public key. (Unfortunately, the deploy and test commands don't currently
+delegate to Fabric/paramiko for this.)
+
+## Usage ##
+
+To deploy Hackasaurus applications to a remote server, run:
+
+    fab -H yourserver.org deploy
+    
+To run integration tests on a remote server, run:
+
+    fab -H yourserver.org test
+
+Run `fab -l` for more commands, and `fab -d <command>` for detailed help
+on a particular command.
 
 ## Local Configuration ##
 
@@ -12,5 +30,6 @@ Virtual hosting configurations are used for the domains of Hackasaurus sites. To
 
 For example, if you want to access htmlpad.org on your development server, you can add an entry for htmlpad.org.dev to your `/etc/hosts` file.
 
+  [Fabric]: http://fabfile.org
   [Hackasaurus]: http://hackasaurus.org
   [Puppet Best Practices]: http://projects.puppetlabs.com/projects/puppet/wiki/Puppet_Best_Practice
