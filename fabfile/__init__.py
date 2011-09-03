@@ -42,7 +42,6 @@ def test(run=None):
     if env['host'] is None:
         abort('please specify a host.')
 
-    t = testing.TestProgram(host=env['host'], module=testing,
-                            defaultTest=run, verbosity=2)
-    if not t.result.wasSuccessful():
+    result = testing.run_tests(testing, defaultTest=run, verbosity=2)
+    if not result.wasSuccessful():
         abort('some tests failed on %s.' % env['host'])

@@ -7,17 +7,16 @@ import unittest
 import urllib2
 import urlparse
 import json
-import subprocess
 
+from fabric.api import env
+from fabric.operations import run
+from fabric.context_managers import hide
 from secrets import load_secrets
-
-server = None
-secrets = None
 
 def vhostreq(url):
     parts = urlparse.urlparse(url)
     newurl = urlparse.urlunparse((parts.scheme,
-                                  server,
+                                  env['host'],
                                   parts.path,
                                   parts.params,
                                   parts.query,
@@ -29,19 +28,15 @@ def vhostreq(url):
     except urllib2.HTTPError, e:
         return e
 
-def try_mysql_login(username, pw, db):
+def try_mysql_login(username, secret_name, db):
+    pw = load_secrets(env['host'])[secret_name]
     cmd = 'mysql -u %s -p%s -D %s -e "show tables;"' % (username, pw, db)
-    ssh_args = ['ssh', 'root@%s' % server, cmd]
-    popen = subprocess.Popen(ssh_args,
-                             stdout=subprocess.PIPE,
-                             stderr=subprocess.STDOUT)
-    out, err = popen.communicate()
-    if popen.returncode:
-        raise Exception(out)
+    with hide('running', 'stdout'):
+        run(cmd)
 
 class TestswarmTests(unittest.TestCase):
     def testDatabaseLoginWorks(self):
-        try_mysql_login('testswarm', secrets['testswarm_pw'], 'testswarm')
+        try_mysql_login('testswarm', 'testswarm_pw', 'testswarm')
 
     def testHomePageIsAccessible(self):
         f = vhostreq('http://swarm.hksr.us/')
@@ -89,11 +84,11 @@ class HackasaurusTests(unittest.TestCase):
 
 class MysqlTests(unittest.TestCase):
     def testRootLoginWorks(self):
-        try_mysql_login('root', secrets['mysql_root_pw'], 'mysql')
+        try_mysql_login('root', 'mysql_root_pw', 'mysql')
 
 class JsbinTests(unittest.TestCase):
     def testDatabaseLoginWorks(self):
-        try_mysql_login('jsbin', secrets['jsbin_pw'], 'jsbin')
+        try_mysql_login('jsbin', 'jsbin_pw', 'jsbin')
 
     def testRootIsAccessible(self):
         e = vhostreq('http://webpad.hackasaurus.org/')
@@ -103,32 +98,13 @@ class JsbinTests(unittest.TestCase):
         e = vhostreq('http://webpad.hackasaurus.org/js/debug/jsbin.js')
         self.assertEqual(e.code, 200)
 
-class TestProgram:
-    def __init__(self, host, module, defaultTest=None,
-                 verbosity=1,
-                 testRunner=unittest.TextTestRunner,
-                 testLoader=unittest.defaultTestLoader):
-        global server
-        global secrets
+def run_tests(module, defaultTest=None, verbosity=1,
+              testRunner=unittest.TextTestRunner,
+              testLoader=unittest.defaultTestLoader):
+    if defaultTest is None:
+        test = testLoader.loadTestsFromModule(module)
+    else:
+        testNames = (defaultTest,)
+        test = testLoader.loadTestsFromNames(testNames, module)
 
-        server = host
-        secrets = load_secrets(host)
-
-        self.module = module
-        self.verbosity = verbosity
-        self.defaultTest = defaultTest
-        self.testRunner = testRunner
-        self.testLoader = testLoader
-
-        if self.defaultTest is None:
-            self.test = self.testLoader.loadTestsFromModule(self.module)
-        else:
-            self.testNames = (self.defaultTest,)
-            self.test = self.testLoader.loadTestsFromNames(self.testNames,
-                                                           self.module)
-
-        self.runTests()
-
-    def runTests(self):
-        testRunner = self.testRunner(verbosity=self.verbosity)
-        self.result = testRunner.run(self.test)
+    return testRunner(verbosity=verbosity).run(test)
