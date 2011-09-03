@@ -98,11 +98,11 @@ class JsbinTests(unittest.TestCase):
         e = vhostreq('http://webpad.hackasaurus.org/js/debug/jsbin.js')
         self.assertEqual(e.code, 200)
 
-def run_tests(module, defaultTest=None, verbosity=1,
+def run_tests(defaultTest=None, verbosity=1,
               testRunner=unittest.TextTestRunner,
               testLoader=unittest.defaultTestLoader):
     if defaultTest is None:
-        test = testLoader.loadTestsFromModule(module)
+        test = testLoader.loadTestsFromModule(sys.modules[__name__])
     else:
         testNames = (defaultTest,)
         test = testLoader.loadTestsFromNames(testNames, module)

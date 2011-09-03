@@ -42,6 +42,6 @@ def test(run=None):
     if env['host'] is None:
         abort('please specify a host.')
 
-    result = testing.run_tests(testing, defaultTest=run, verbosity=2)
+    result = testing.run_tests(defaultTest=run, verbosity=2)
     if not result.wasSuccessful():
         abort('some tests failed on %s.' % env['host'])
