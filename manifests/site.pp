@@ -1,5 +1,4 @@
-$python_version = "2.7"
-
+include repositories
 include secrets
 include htmlpad
 include hackasaurus
