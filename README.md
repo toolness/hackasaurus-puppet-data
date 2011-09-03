@@ -6,16 +6,16 @@ Deployment is assumed to target a bare Ubuntu natty server (11.04). All other de
 
 You'll need [Fabric][].
 
-In order to deploy and test, you'll also need to set up `ssh` such that
+In order to test, you'll also need to set up `ssh` such that
 it's possible to access the remote server as root, e.g. by setting up
-a public key. (Unfortunately, the deploy and test commands don't currently
+a public key. (Unfortunately, the test command doesn't currently
 delegate to Fabric/paramiko for this.)
 
 ## Usage ##
 
 To deploy Hackasaurus applications to a remote server, run:
 
-    fab -H yourserver.org deploy
+    fab -u root -H yourserver.org deploy
     
 To run integration tests on a remote server, run:
 
