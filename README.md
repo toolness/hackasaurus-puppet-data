@@ -26,8 +26,9 @@ on a particular command.
 
 ## Secrets ##
 
-All passwords and other secrets for Hackasaurus applications are stored in 
-`secrets.json`. Feel free to change this as necessary.
+Default passwords and other secrets for Hackasaurus applications are stored 
+in `secrets.json`. You can override specific values by creating
+`secrets.`*hostname*`.json`, where *hostname* is your server's hostname.
 
 ## Local Configuration ##
 
