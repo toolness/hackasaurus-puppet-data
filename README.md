@@ -8,6 +8,12 @@ You'll need [Fabric][].
 
 ## Usage ##
 
+First, clone the repository and check out its submodules:
+
+    git clone git://github.com/hackasaurus/hackasaurus-puppet-data.git
+    cd hackasaurus-puppet-data
+    git submodule update --init
+
 To deploy Hackasaurus applications to a remote server, run:
 
     fab -u root -H yourserver.org deploy

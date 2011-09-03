@@ -1,5 +1,6 @@
 import sys
 import os
+import imp
 
 from fabric.context_managers import cd
 from fabric.utils import abort
@@ -14,9 +15,20 @@ ROOT = os.path.abspath(os.path.dirname(__file__))
 def path(*x):
     return os.path.join(ROOT, *x)
 
+def import_fabfile(pathname):
+    fabfilename = os.path.join(pathname, 'fabfile.py')
+    fabfile = open(fabfilename)
+    desc = ('.py', 'r', imp.PY_SOURCE)
+    modname = os.path.basename(pathname)
+    module = imp.load_module(modname, fabfile, fabfilename, desc)
+    fabfile.close()
+    return module
+
+htmlpad = import_fabfile(path('..', 'htmlpad'))
+
 @task
-def deploy():
-    "deploy the entire Hackasaurus server"
+def configure():
+    "configure the Hackasaurus server"
 
     secrets.build_secrets_manifest(env['host'])
     run('rm -rf /root/deployment')
@@ -26,6 +38,13 @@ def deploy():
         upload_project(path('..', 'modules'))
         put(path('run-on-server', 'bootstrap.py'), '.')
         run('python bootstrap.py')
+
+@task
+def deploy():
+    "deploy the entire Hackasaurus server and all its apps"
+
+    configure()
+    htmlpad.deploy()
 
 @task
 def test(run=None):

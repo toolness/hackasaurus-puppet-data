@@ -1,3 +1,6 @@
 [submodule "modules/vcsrepo"]
 	path = modules/vcsrepo
 	url = git://github.com/bruce/puppet-vcsrepo.git
+[submodule "htmlpad"]
+	path = htmlpad
+	url = git://github.com/hackasaurus/htmlpad.git
