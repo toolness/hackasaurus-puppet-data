@@ -9,14 +9,10 @@ import urlparse
 import json
 import subprocess
 
-ROOT = os.path.abspath(os.path.dirname(__file__))
-
-def path(*x):
-    return os.path.join(ROOT, *x)
+from secrets import load_secrets
 
 server = None
-
-secrets = json.load(open(path('..', 'secrets.json')))
+secrets = None
 
 def vhostreq(url):
     parts = urlparse.urlparse(url)
@@ -152,6 +148,7 @@ Examples:
 
     def parseArgs(self, argv):
         global server
+        global secrets
         import getopt
         try:
             options, args = getopt.getopt(argv[1:], 'hHvq',
@@ -166,6 +163,7 @@ Examples:
             if len(args) == 0:
                 raise getopt.error("You must provide a server name.")
             server = args[0]
+            secrets = load_secrets(server)
             args = args[1:]
             if len(args) == 0 and self.defaultTest is None:
                 self.test = self.testLoader.loadTestsFromModule(self.module)
