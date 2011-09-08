@@ -1,0 +1,12 @@
+<VirtualHost *:80>
+  ServerName <%= site %>
+  ServerAlias <%= site %>.dev
+
+  WSGIDaemonProcess <%= site %> processes=1 threads=15
+  WSGIProcessGroup <%= site %>
+  WSGIScriptAlias / <%= wsgiDir %>/hackpub.wsgi
+  <Directory <%= wsgiDir %>>
+    Order allow,deny
+    Allow from all
+  </Directory>
+</VirtualHost>
