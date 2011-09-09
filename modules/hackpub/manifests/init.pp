@@ -1,4 +1,4 @@
-class htmlpad {
+class hackpub {
   $site = 'hackpub.hackasaurus.org'
   $rootDir = '/var/hackpub.hackasaurus.org'
   $wsgiDir = "$rootDir/wsgi"

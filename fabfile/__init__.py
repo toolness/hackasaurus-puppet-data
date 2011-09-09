@@ -8,7 +8,7 @@ from fabric.api import task, env
 from fabric.operations import run, put
 from fabric.contrib.project import upload_project
 
-from . import testing, jsbin, secrets
+from . import testing, hackpub, jsbin, secrets
 
 ROOT = os.path.abspath(os.path.dirname(__file__))
 
@@ -45,6 +45,7 @@ def deploy():
 
     configure()
     htmlpad.deploy()
+    hackpub.deploy()
 
 @task
 def test(run=None):

@@ -34,6 +34,14 @@ def try_mysql_login(username, secret_name, db):
     with hide('running', 'stdout'):
         run(cmd)
 
+class HackpubTests(unittest.TestCase):
+    def testMetadata404Works(self):
+        e = vhostreq('http://hackpub.hackasaurus.org/metadata/nonexistent')
+        self.assertEqual(e.headers['Access-Control-Allow-Methods'],
+                         "OPTIONS, GET, POST")
+        self.assertEqual(e.read(), 'not found: /metadata/nonexistent')
+        self.assertEqual(e.code, 404)
+
 class TestswarmTests(unittest.TestCase):
     def testDatabaseLoginWorks(self):
         try_mysql_login('testswarm', 'testswarm_pw', 'testswarm')
@@ -101,10 +109,11 @@ class JsbinTests(unittest.TestCase):
 def run_tests(defaultTest=None, verbosity=1,
               testRunner=unittest.TextTestRunner,
               testLoader=unittest.defaultTestLoader):
+    me = sys.modules[__name__]
     if defaultTest is None:
-        test = testLoader.loadTestsFromModule(sys.modules[__name__])
+        test = testLoader.loadTestsFromModule(me)
     else:
         testNames = (defaultTest,)
-        test = testLoader.loadTestsFromNames(testNames, module)
+        test = testLoader.loadTestsFromNames(testNames, me)
 
     return testRunner(verbosity=verbosity).run(test)
