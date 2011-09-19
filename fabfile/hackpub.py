@@ -14,6 +14,7 @@ AWS_ACCESS_KEY_ID = '%(hackpub_aws_access_key_id)s'
 AWS_SECRET_ACCESS_KEY = '%(hackpub_aws_secret_access_key)s'
 
 BUCKET_NAME = '%(hackpub_bucket_name)s'
+PUBLISH_DOMAIN = '%(hackpub_publish_domain)s'
 """
 
 def run_manage_cmd(cmd):
