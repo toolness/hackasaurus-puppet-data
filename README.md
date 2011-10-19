@@ -1,4 +1,17 @@
-This is an attempt to concisely define and document the server configuration for [Hackasaurus][] sites using [Puppet Best Practices][].
+This is an attempt to concisely define and document the server configuration
+and deployment for [Hackasaurus][] sites using a combination of Python scripts
+and [Puppet Best Practices][].
+
+The sites this repository is capable of configuring and deploying include:
+
+  * [webpad.hackasaurus.org](http://webpad.hackasaurus.org/) - An experimental [fork of jsbin](https://github.com/hackasaurus/jsbin).
+  * [hackasaurus.org](http://hackasaurus.org) - Primary [Hackasaurus website](https://github.com/hackasaurus/hackasaurus.org).
+  * [hackbook.hackasaurus.org](http://hackbook.hackasaurus.org) - The [Hackbook](https://github.com/hackasaurus/hackbook), an experimental HTML and CSS reference.
+  * [htmlpad.org](http://htmlpad.org/) - [HTMLPad](https://github.com/hackasaurus/htmlpad), a simple experimental app that allows people to use Etherpad to write and collaborate on HTML, CSS, and JavaScript.
+  * [hackpub.hackasaurus.org](http://hackpub.hackasaurus.org) - [hackpub](https://github.com/hackasaurus/hackpub), a simple REST API allowing the X-Ray Goggles to publish shared hacks as static files to Amazon S3.
+  * [swarm.hksr.us](http://swarm.hksr.us/) - An experimental [Test Swarm](https://github.com/toolness/testswarm) instance for the Web X-Ray Goggles.
+
+Note that the X-Ray Goggles are currently hosted at secure.toolness.com, but they will likely move to this server infrastructure eventually.
 
 Deployment is assumed to target a bare Ubuntu natty server (11.04). All other dependencies are automatically installed by the various configuration files in this repository.
 
