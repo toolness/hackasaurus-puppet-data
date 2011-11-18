@@ -4,3 +4,6 @@
 [submodule "htmlpad"]
 	path = htmlpad
 	url = git://github.com/hackasaurus/htmlpad.git
+[submodule "hackasaurus.org"]
+	path = hackasaurus.org
+	url = git://github.com/hackasaurus/hackasaurus.org.git

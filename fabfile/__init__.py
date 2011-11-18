@@ -25,6 +25,7 @@ def import_fabfile(pathname):
     return module
 
 htmlpad = import_fabfile(path('..', 'htmlpad'))
+hackasaurus = import_fabfile(path('..', 'hackasaurus.org'))
 
 @task
 def configure():
@@ -44,6 +45,7 @@ def deploy():
     "deploy the entire Hackasaurus server and all its apps"
 
     configure()
+    hackasaurus.deploy()
     htmlpad.deploy()
     hackpub.deploy()
 
