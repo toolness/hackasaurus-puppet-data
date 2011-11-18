@@ -75,20 +75,9 @@ class HackbookTests(unittest.TestCase):
         self.assertTrue('Hackbook' in f.read())
 
 class HackasaurusTests(unittest.TestCase):
-    def testUpdateWorks(self):
-        f = vhostreq('http://hackasaurus.org/wsgi/update-site')
-        for retval in json.loads(f.read()):
-            self.assertEqual(retval, 0)
-        self.assertEqual(f.code, 200)
-
     def testHomePageIsAccessible(self):
-        f = vhostreq('http://hackasaurus.org/')
+        f = vhostreq('http://hackasaurus.org/en-US/')
         self.assertTrue('Hackasaurus' in f.read())
-
-    def testRedirectsWork(self):
-        e = vhostreq('http://hackasaurus.org/news/')
-        self.assertEqual(e.code, 200)
-        self.assertEqual(e.geturl(), "http://hackasaurus.org/blog/")
 
 class MysqlTests(unittest.TestCase):
     def testRootLoginWorks(self):
