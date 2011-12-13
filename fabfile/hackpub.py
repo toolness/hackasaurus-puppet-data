@@ -15,6 +15,11 @@ AWS_SECRET_ACCESS_KEY = '%(hackpub_aws_secret_access_key)s'
 
 BUCKET_NAME = '%(hackpub_bucket_name)s'
 PUBLISH_DOMAIN = '%(hackpub_publish_domain)s'
+
+EXTRA_BUCKETS['lovebomb'] = subclass_settings(globals(),
+    BUCKET_NAME='cmon.lovebomb.me',
+    PUBLISH_DOMAIN='cmon.lovebomb.me'
+    )
 """
 
 def run_manage_cmd(cmd):
