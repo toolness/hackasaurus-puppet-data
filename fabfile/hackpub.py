@@ -10,6 +10,8 @@ REPO_URL = "git://github.com/hackasaurus/hackpub.git"
 LOCAL_SETTINGS = """\
 from settings import *
 
+ENABLE_PPX = True
+
 AWS_ACCESS_KEY_ID = '%(hackpub_aws_access_key_id)s'
 AWS_SECRET_ACCESS_KEY = '%(hackpub_aws_secret_access_key)s'
 
