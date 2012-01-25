@@ -7,3 +7,6 @@
 [submodule "hackasaurus.org"]
 	path = hackasaurus.org
 	url = git://github.com/hackasaurus/hackasaurus.org.git
+[submodule "webxray"]
+	path = webxray
+	url = https://github.com/hackasaurus/webxray.git

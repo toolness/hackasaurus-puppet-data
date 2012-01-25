@@ -26,6 +26,7 @@ def import_fabfile(pathname):
 
 htmlpad = import_fabfile(path('..', 'htmlpad'))
 hackasaurus = import_fabfile(path('..', 'hackasaurus.org'))
+webxray = import_fabfile(path('..', 'webxray'))
 
 @task
 def configure():
@@ -48,6 +49,7 @@ def deploy():
     hackasaurus.deploy()
     htmlpad.deploy()
     hackpub.deploy()
+    webxray.deploy()
 
 @task
 def test(run=None):
