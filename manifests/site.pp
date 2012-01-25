@@ -6,3 +6,4 @@ include hackbook
 include hackpub
 include testswarm
 include jsbin
+include webxray

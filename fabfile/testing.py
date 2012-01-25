@@ -79,6 +79,23 @@ class HackasaurusTests(unittest.TestCase):
         f = vhostreq('http://hackasaurus.org/en-US/')
         self.assertTrue('Hackasaurus' in f.read())
 
+    def testSpanishLocaleIsAccessible(self):
+        f = vhostreq('http://hackasaurus.org/es/')
+        self.assertTrue('Superlentes' in f.read())
+
+class WebxrayTests(unittest.TestCase):
+    def testWebxrayJsIsAccessible(self):
+        f = vhostreq('http://webxray.hackasaurus.org/webxray.js')
+        self.assertTrue('webxrayWhenGogglesLoad' in f.read())
+
+    def testSrcDirIsAccessible(self):
+        f = vhostreq('http://webxray.hackasaurus.org/src/get-bookmarklet-url.js')
+        self.assertTrue('webxrayWhenGogglesLoad' in f.read())
+
+    def testSpanishLocaleIsAccessible(self):
+        f = vhostreq('http://webxray.hackasaurus.org/src/locale/es.js')
+        self.assertTrue('Superlentes' in f.read())
+
 class MysqlTests(unittest.TestCase):
     def testRootLoginWorks(self):
         try_mysql_login('root', 'mysql_root_pw', 'mysql')

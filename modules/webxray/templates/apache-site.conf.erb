@@ -1,0 +1,16 @@
+<VirtualHost *:80>
+  ServerName <%= site %>
+  ServerAlias <%= site %>.dev
+
+  DocumentRoot <%= staticFilesDir %>
+  <Directory />
+    Options FollowSymLinks
+    AllowOverride None
+  </Directory>
+  <Directory <%= staticFilesDir %>/>
+    Options Indexes FollowSymLinks MultiViews
+    AllowOverride FileInfo
+    Order allow,deny
+    allow from all
+  </Directory>
+</VirtualHost>
